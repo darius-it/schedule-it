@@ -19,8 +19,8 @@ const Home = () => {
 
   return (
     <div className="pt-10">
-        <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold mb-6">Appointment Scheduler</h1>
+        <div className="container mx-auto p-6 bg-background rounded-lg shadow-md">
+          <h1 className="text-3xl font-bold mb-6 text-foreground">Appointment Scheduler</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="scheduleName">Schedule Name</Label>

@@ -153,14 +153,14 @@ const Schedule = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-6">{scheduleName} Schedule</h1>
+    <div className="container mx-auto mt-10 p-6 bg-background rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold mb-6 text-foreground">{scheduleName} Schedule</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="time-grid bg-gray-100 p-4 rounded-md">
+        <div className="time-grid bg-muted p-4 rounded-md">
             {generateTimeSlots().map(slot => (
                 <div key={slot} className="time-slot flex items-center h-14 relative">
-                    <span className="w-20 text-sm self-start">{slot}</span>
-                    <div className="absolute left-20 right-0 top-0 bottom-0 border-b border-gray-300"></div>
+                    <span className="w-20 text-sm self-start text-muted-foreground">{slot}</span>
+                    <div className="absolute left-20 right-0 top-0 bottom-0 border-b border-border"></div>
                     {sortAppointments(appointments).map(apt => {
                         if (isAppointmentInSlot(apt, slot)) {
                             const style = getAppointmentStyle(apt, slot);
@@ -168,7 +168,7 @@ const Schedule = () => {
                             return (
                             <div 
                                 key={apt.id} 
-                                className="appointment absolute left-20 right-0 text-white text-sm overflow-hidden z-10"
+                                className="appointment absolute left-20 right-0 text-primary-foreground text-sm overflow-hidden z-10"
                                 style={style}
                             >
                                 {isFirstSlot && (
@@ -236,11 +236,15 @@ const Schedule = () => {
 };
 
 const generateContrastColor = () => {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = 60 + Math.floor(Math.random() * 20); // 60-80%
-    const lightness = 45 + Math.floor(Math.random() * 10); // 45-55%
-  
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  const colors = [
+    'bg-primary',
+    'bg-secondary',
+    'bg-accent',
+    'bg-muted',
+    'bg-card',
+    'bg-popover',
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
 };
 
 export default Schedule;
