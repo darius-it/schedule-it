@@ -1,4 +1,6 @@
-# schedule-it
+
+<img alt="schedule-it banner" src="https://github.com/user-attachments/assets/9ec1d6e1-8a72-4c27-9ca5-3804c71f6c84" width="100%"/>
+<br>
 
 A simple and intuitive scheduling application that helps you manage your time effectively. Schedule-it allows users to create, edit, and organize events, and collaborate with others on shared calendars. Built with React, TailwindCSS, shadcn/ui and Supabase.
 
