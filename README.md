@@ -10,5 +10,5 @@ A simple and intuitive scheduling application that helps you manage your time ef
 - [ ] Add dark/light mode toggle
 
 ## Credits
-Copyright (c) 2024, darius-it
+Copyright (c) 2024, darius-it.
 Licensed under the BSD 3-Clause License.
