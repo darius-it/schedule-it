@@ -1,8 +1,14 @@
-# React + Vite
+# schedule-it
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and intuitive scheduling application that helps you manage your time effectively. Schedule-it allows users to create, edit, and organize events, and collaborate with others on shared calendars. Built with React, TailwindCSS, shadcn/ui and Supabase.
 
-Currently, two official plugins are available:
+## Planned Features
+- [ ] Generate project slugs using dictionary words (e.g. funny-tortoise-book); should be unique so they can be used as an ID
+- [ ] Create new table for schedules and link it to appointments using a foreign key relation
+- [ ] Save newly created schedules to localstorage and also allow add button to add them from slug ("My Schedules" section on homepage)
+- [ ] Adjust UI styling
+- [ ] Add dark/light mode toggle
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Credits
+Copyright (c) 2024, darius-it
+Licensed under the BSD 3-Clause License.
