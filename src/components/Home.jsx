@@ -111,7 +111,7 @@ const Home = () => {
               <Input
                 id="scheduleName"
                 type="text"
-                placeholder="Enter schedule name"
+                placeholder="Enter schedule name (name of your timeline)"
                 value={scheduleName}
                 onChange={(e) => setScheduleName(e.target.value)}
                 required

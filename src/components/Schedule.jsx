@@ -244,9 +244,12 @@ const Schedule = () => {
       </div>
       <div className="container mx-auto mt-10 p-6 bg-background rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-foreground">
-            {schedule.icon} {schedule.title}
-          </h1>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-bold text-foreground">
+              {schedule.icon} {schedule.title}
+            </h1>
+            <span className='text-muted-foreground text-sm'>Schedule Slug (unique ID): <strong>{scheduleId}</strong> (use this to share your schedule with others)</span>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
