@@ -16,8 +16,14 @@ const Schedule = () => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
 
-  const [startTime, setStartTime] = useState(searchParams.get('start') || '09:00');
-  const [endTime, setEndTime] = useState(searchParams.get('end') || '17:00');
+  const [startTime, setStartTime] = useState(() => {
+    const savedStartTime = localStorage.getItem(`startTime_${scheduleId}`);
+    return searchParams.get('start') || savedStartTime || '09:00';
+  });
+  const [endTime, setEndTime] = useState(() => {
+    const savedEndTime = localStorage.getItem(`endTime_${scheduleId}`);
+    return searchParams.get('end') || savedEndTime || '17:00';
+  });
   const [granularity, setGranularity] = useState(() => {
     const savedGranularity = localStorage.getItem(`granularity_${scheduleId}`);
     return savedGranularity ? parseInt(savedGranularity) : 15;
@@ -43,8 +49,10 @@ const Schedule = () => {
   useEffect(() => {
     if (scheduleId) {
       localStorage.setItem(`granularity_${scheduleId}`, granularity.toString());
+      localStorage.setItem(`startTime_${scheduleId}`, startTime);
+      localStorage.setItem(`endTime_${scheduleId}`, endTime);
     }
-  }, [scheduleId, granularity]);
+  }, [scheduleId, granularity, startTime, endTime]);
 
   const generateAppointmentColors = (appointments) => {
     const newColors = {};
