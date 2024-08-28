@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -7,13 +7,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { supabase } from '../supabaseClient';
 import { generate } from 'random-words';
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { X } from 'lucide-react';
 
 const Home = () => {
   const [scheduleName, setScheduleName] = useState('');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
   const [icon, setIcon] = useState('📅'); // Default icon
+  const [mySchedules, setMySchedules] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [scheduleSlug, setScheduleSlug] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedSchedules = JSON.parse(localStorage.getItem('mySchedules') || '[]');
+    setMySchedules(savedSchedules);
+  }, []);
 
   const generateUniqueId = async () => {
     let isUnique = false;
@@ -45,6 +55,11 @@ const Home = () => {
       
       if (error) throw error;
       
+      const newSchedule = { id, title: scheduleName, icon };
+      const updatedSchedules = [...mySchedules, newSchedule];
+      setMySchedules(updatedSchedules);
+      localStorage.setItem('mySchedules', JSON.stringify(updatedSchedules));
+      
       navigate(`/schedule/${id}?start=${startTime}&end=${endTime}`);
     } catch (error) {
       console.error('Error creating schedule:', error);
@@ -52,10 +67,40 @@ const Home = () => {
     }
   };
 
+  const handleAddExistingSchedule = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('schedules')
+        .select('*')
+        .eq('id', scheduleSlug)
+        .single();
+
+      if (error) throw error;
+
+      const newSchedule = { id: data.id, title: data.title, icon: data.icon };
+      const updatedSchedules = [...mySchedules, newSchedule];
+      setMySchedules(updatedSchedules);
+      localStorage.setItem('mySchedules', JSON.stringify(updatedSchedules));
+      setIsDialogOpen(false);
+      setScheduleSlug('');
+      toast.success('Schedule added successfully');
+    } catch (error) {
+      console.error('Error adding existing schedule:', error);
+      toast.error('Failed to add schedule. Please check the slug and try again.');
+    }
+  };
+
+  const handleRemoveSchedule = (id) => {
+    const updatedSchedules = mySchedules.filter(schedule => schedule.id !== id);
+    setMySchedules(updatedSchedules);
+    localStorage.setItem('mySchedules', JSON.stringify(updatedSchedules));
+    toast.success('Schedule removed successfully');
+  };
+
   return (
     <div className="pt-10">
-        <div className="container mx-auto p-6 bg-background rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold mb-6 text-foreground">Appointment Scheduler</h1>
+        <div className="mx-auto max-w-6xl">
+          <h1 className="text-3xl font-bold mb-4 text-foreground">schedule-it — Appointment Scheduler</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="scheduleName">Schedule Name</Label>
@@ -108,6 +153,53 @@ const Home = () => {
             <Button type="submit">Create Schedule</Button>
           </form>
         </div>
+        <div className="mt-12 mx-auto max-w-6xl">
+            <h2 className="text-2xl font-bold mb-4">My Schedules</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {mySchedules.map((schedule) => (
+                <div 
+                  key={schedule.id} 
+                  className="p-4 border rounded-lg shadow-sm cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors flex justify-between items-center"
+                >
+                  <div onClick={() => navigate(`/schedule/${schedule.id}`)}>
+                    <span className="text-2xl mr-2">{schedule.icon}</span>
+                    <span className="font-semibold">{schedule.title}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveSchedule(schedule.id);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="mt-4">Add Existing Schedule</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add Existing Schedule</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <Label htmlFor="scheduleSlug">Schedule Slug</Label>
+                  <Input
+                    id="scheduleSlug"
+                    type="text"
+                    placeholder="Enter schedule slug"
+                    value={scheduleSlug}
+                    onChange={(e) => setScheduleSlug(e.target.value)}
+                  />
+                  <Button onClick={handleAddExistingSchedule}>Add Schedule</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
     </div>
   );
 };
