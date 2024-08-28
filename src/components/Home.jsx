@@ -95,7 +95,7 @@ const Home = () => {
     const updatedSchedules = mySchedules.filter(schedule => schedule.id !== id);
     setMySchedules(updatedSchedules);
     localStorage.setItem('mySchedules', JSON.stringify(updatedSchedules));
-    toast.success('Schedule removed successfully');
+    toast.success('Schedule removed from your dashboard successfully');
   };
 
   return (

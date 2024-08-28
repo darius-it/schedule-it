@@ -248,6 +248,11 @@ const Schedule = () => {
 
       if (scheduleError) throw scheduleError;
 
+      // Remove the schedule from local storage if it's referenced there
+      const storedSchedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+      const updatedSchedules = storedSchedules.filter(schedule => schedule.id !== scheduleId);
+      localStorage.setItem('schedules', JSON.stringify(updatedSchedules));
+
       toast.success('Schedule and all associated appointments have been deleted successfully!');
       navigate('/');
     } catch (error) {
