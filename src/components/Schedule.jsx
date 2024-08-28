@@ -229,7 +229,7 @@ const Schedule = () => {
         <div className="appointment-form">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Your Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 type="text"
