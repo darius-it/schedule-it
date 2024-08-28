@@ -75,6 +75,7 @@ const Schedule = () => {
     if (error) {
       console.error('Error fetching appointments:', error);
     } else {
+      console.log('Fetched appointments:', data);
       setAppointments(data || []);
       generateAppointmentColors(data || []);
     }
@@ -82,6 +83,10 @@ const Schedule = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!selectedTime) {
+      alert('Please select a start time for the appointment.');
+      return;
+    }
     const startDateTime = parseISO(`${format(new Date(), 'yyyy-MM-dd')}T${selectedTime}`);
     const endDateTime = addMinutes(startDateTime, duration);
   
@@ -155,8 +160,11 @@ const Schedule = () => {
     const height = endOffset - startOffset;
 
     return {
+      position: 'absolute',
       top: `${(startOffset / 15) * 100}%`,
       height: `${(height / 15) * 100}%`,
+      left: '64px',
+      right: '0',
       backgroundColor: appointmentColors[appointment.id] || generateContrastColor(),
     };
   };
@@ -201,7 +209,7 @@ const Schedule = () => {
                             return (
                             <div 
                                 key={apt.id} 
-                                className="appointment absolute left-20 right-0 text-primary-foreground text-sm overflow-hidden z-10"
+                                className="appointment text-primary-foreground text-sm overflow-hidden z-10"
                                 style={style}
                             >
                                 {isFirstSlot && (
@@ -246,7 +254,7 @@ const Schedule = () => {
             </div>
             <div>
               <Label htmlFor="startTime">Start Time</Label>
-              <Select value={selectedTime} onValueChange={setSelectedTime}>
+              <Select value={selectedTime} onValueChange={setSelectedTime} required>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a time" />
                 </SelectTrigger>
@@ -269,15 +277,7 @@ const Schedule = () => {
 };
 
 const generateContrastColor = () => {
-  const colors = [
-    'bg-primary',
-    'bg-secondary',
-    'bg-accent',
-    'bg-muted',
-    'bg-card',
-    'bg-popover',
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
+  return `hsl(${Math.random() * 360}, 70%, 80%)`;
 };
 
 export default Schedule;
