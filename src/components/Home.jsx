@@ -5,16 +5,51 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { supabase } from '../supabaseClient'; // Make sure to import supabase client
+import { generate } from 'random-words'; // Make sure to install and import random-words package
 
 const Home = () => {
   const [scheduleName, setScheduleName] = useState('');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
+  const [icon, setIcon] = useState('📅'); // Default icon
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const generateUniqueId = async () => {
+    let isUnique = false;
+    let id;
+    while (!isUnique) {
+      id = generate({ exactly: 3, join: '-' });
+      const { data, error } = await supabase
+        .from('schedules')
+        .select('id')
+        .eq('id', id)
+        .single();
+      
+      if (error && error.code === 'PGRST116') {
+        isUnique = true;
+      }
+    }
+    return id;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate(`/schedule/${scheduleName}?start=${startTime}&end=${endTime}`);
+    try {
+      const id = await generateUniqueId();
+      const { data, error } = await supabase
+        .from('schedules')
+        .insert([
+          { id, title: scheduleName, icon }
+        ]);
+      
+      if (error) throw error;
+      
+      navigate(`/schedule/${id}?start=${startTime}&end=${endTime}`);
+    } catch (error) {
+      console.error('Error creating schedule:', error);
+      alert('Failed to create schedule. Please try again.');
+    }
   };
 
   return (
@@ -30,6 +65,17 @@ const Home = () => {
                 placeholder="Enter schedule name"
                 value={scheduleName}
                 onChange={(e) => setScheduleName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="icon">Icon</Label>
+              <Input
+                id="icon"
+                type="text"
+                placeholder="Enter icon (emoji or text)"
+                value={icon}
+                onChange={(e) => setIcon(e.target.value)}
                 required
               />
             </div>

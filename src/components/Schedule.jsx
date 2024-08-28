@@ -9,22 +9,26 @@ import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 const Schedule = () => {
-  const { scheduleName } = useParams();
+  const { scheduleId } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const startTime = searchParams.get('start');
   const endTime = searchParams.get('end');
 
+  const [schedule, setSchedule] = useState(null);
   const [appointments, setAppointments] = useState([]);
-  const [nickname, setNickname] = useState('');
+  const [name, setName] = useState('');
   const [duration, setDuration] = useState(30);
   const [selectedTime, setSelectedTime] = useState('');
 
   const [appointmentColors, setAppointmentColors] = useState({});
 
   useEffect(() => {
-    fetchAppointments();
-  }, [scheduleName]);
+    if (scheduleId) {
+      fetchSchedule();
+      fetchAppointments();
+    }
+  }, [scheduleId]);
 
   const generateAppointmentColors = (appointments) => {
     const newColors = {};
@@ -38,16 +42,41 @@ const Schedule = () => {
     setAppointmentColors(newColors);
   };
 
+  const fetchSchedule = async () => {
+    if (!scheduleId) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('schedules')
+        .select('*')
+        .eq('id', scheduleId)
+        .single();
+
+      if (error) throw error;
+
+      setSchedule(data);
+    } catch (error) {
+      console.error('Error fetching schedule:', error);
+      if (error.code === 'PGRST116') {
+        // Handle the case where no schedule is found
+        setSchedule(null);
+      }
+    }
+  };
+
   const fetchAppointments = async () => {
+    if (!scheduleId) return;
+
     const { data, error } = await supabase
       .from('appointments')
       .select('*')
-      .eq('schedule_name', scheduleName);
+      .eq('schedule', scheduleId);
   
-    if (error) console.error('Error fetching appointments:', error);
-    else {
-      setAppointments(data);
-      generateAppointmentColors(data);
+    if (error) {
+      console.error('Error fetching appointments:', error);
+    } else {
+      setAppointments(data || []);
+      generateAppointmentColors(data || []);
     }
   };
 
@@ -76,10 +105,10 @@ const Schedule = () => {
       .from('appointments')
       .insert([
         {
-          schedule_name: scheduleName,
+          schedule: scheduleId,
           start_time: startDateTime.toISOString(),
           end_time: endDateTime.toISOString(),
-          nickname: nickname,
+          name: name,
         },
       ]);
   
@@ -87,7 +116,7 @@ const Schedule = () => {
     else {
       alert('Appointment scheduled successfully!');
       await fetchAppointments();
-      setNickname('');
+      setName('');
       setSelectedTime('');
     }
   };
@@ -140,7 +169,7 @@ const Schedule = () => {
     const { error } = await supabase
       .from('appointments')
       .delete()
-      .eq('schedule_name', scheduleName);
+      .eq('schedule', scheduleId);
 
     if (error) {
       console.error('Error deleting appointments:', error);
@@ -152,9 +181,13 @@ const Schedule = () => {
     }
   };
 
+  if (!schedule) return <div>Loading...</div>;
+
   return (
     <div className="container mx-auto mt-10 p-6 bg-background rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-6 text-foreground">{scheduleName} Schedule</h1>
+      <h1 className="text-3xl font-bold mb-6 text-foreground">
+        {schedule.icon} {schedule.title}
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="time-grid bg-muted p-4 rounded-md">
             {generateTimeSlots().map(slot => (
@@ -173,7 +206,7 @@ const Schedule = () => {
                             >
                                 {isFirstSlot && (
                                   <div className="p-2">
-                                    <div className="font-semibold">{apt.nickname}</div>
+                                    <div className="font-semibold">{apt.name}</div>
                                     <div className="text-xs">{format(parseISO(apt.start_time), 'HH:mm')} - {format(parseISO(apt.end_time), 'HH:mm')}</div>
                                   </div>
                                 )}
@@ -188,13 +221,13 @@ const Schedule = () => {
         <div className="appointment-form">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="nickname">Your Nickname</Label>
+              <Label htmlFor="name">Your Name</Label>
               <Input
-                id="nickname"
+                id="name"
                 type="text"
-                placeholder="Enter your nickname"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                placeholder="Enter a name for the appointment"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>

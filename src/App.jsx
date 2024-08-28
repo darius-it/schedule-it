@@ -10,7 +10,7 @@ function App() {
       <div className="min-h-screen bg-background">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/schedule/:scheduleName" element={<Schedule />} />
+          <Route path="/schedule/:scheduleId" element={<Schedule />} />
         </Routes>
       </div>
     </Router>

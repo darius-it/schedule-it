@@ -5,8 +5,8 @@
 A simple and intuitive scheduling application that helps you manage your time effectively. Schedule-it allows users to create, edit, and organize events, and collaborate with others on shared calendars. Built with React, TailwindCSS, shadcn/ui and Supabase.
 
 ## Planned Features
-- [ ] Generate project slugs using dictionary words (e.g. funny-tortoise-book); should be unique so they can be used as an ID
-- [ ] Create new table for schedules and link it to appointments using a foreign key relation
+- [x] Generate project slugs using dictionary words (e.g. funny-tortoise-book); should be unique so they can be used as an ID
+- [x] Create new table for schedules and link it to appointments using a foreign key relation
 - [ ] Save newly created schedules to localstorage and also allow add button to add them from slug ("My Schedules" section on homepage)
 - [ ] Turn it into a PWA for more convenient usage from mobile devices
 - [ ] Adjust UI styling
