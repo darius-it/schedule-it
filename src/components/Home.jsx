@@ -7,6 +7,7 @@ import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { supabase } from '../supabaseClient'; // Make sure to import supabase client
 import { generate } from 'random-words'; // Make sure to install and import random-words package
+import { toast } from "sonner";
 
 const Home = () => {
   const [scheduleName, setScheduleName] = useState('');
@@ -48,7 +49,7 @@ const Home = () => {
       navigate(`/schedule/${id}?start=${startTime}&end=${endTime}`);
     } catch (error) {
       console.error('Error creating schedule:', error);
-      alert('Failed to create schedule. Please try again.');
+      toast.error('Failed to create schedule. Please try again.');
     }
   };
 

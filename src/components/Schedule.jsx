@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { toast } from "sonner";
 
 const Schedule = () => {
   const { scheduleId } = useParams();
@@ -84,7 +85,7 @@ const Schedule = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedTime) {
-      alert('Please select a start time for the appointment.');
+      toast.error('Please select a start time for the appointment.');
       return;
     }
     const startDateTime = parseISO(`${format(new Date(), 'yyyy-MM-dd')}T${selectedTime}`);
@@ -102,7 +103,7 @@ const Schedule = () => {
     });
   
     if (isOverlapping) {
-      alert('This time slot overlaps with an existing appointment.');
+      toast.error('This time slot overlaps with an existing appointment.');
       return;
     }
   
@@ -119,7 +120,7 @@ const Schedule = () => {
   
     if (error) console.error('Error creating appointment:', error);
     else {
-      alert('Appointment scheduled successfully!');
+      toast.success('Appointment scheduled successfully!');
       await fetchAppointments();
       setName('');
       setSelectedTime('');
@@ -181,9 +182,9 @@ const Schedule = () => {
 
     if (error) {
       console.error('Error deleting appointments:', error);
-      alert('Failed to delete appointments. Please try again.');
+      toast.error('Failed to delete appointments. Please try again.');
     } else {
-      alert('All appointments have been deleted successfully!');
+      toast.success('All appointments have been deleted successfully!');
       setAppointments([]);
       setAppointmentColors({});
     }
