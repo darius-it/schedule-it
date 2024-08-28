@@ -277,7 +277,11 @@ const Schedule = () => {
 };
 
 const generateContrastColor = () => {
-  return `hsl(${Math.random() * 360}, 70%, 80%)`;
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = 60 + Math.floor(Math.random() * 20); // 60-80%
+  const lightness = 45 + Math.floor(Math.random() * 10); // 45-55%
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
 export default Schedule;
