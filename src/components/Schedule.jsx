@@ -39,6 +39,7 @@ const Schedule = () => {
   const [appointmentColors, setAppointmentColors] = useState({});
   const [isTimeWindowDialogOpen, setIsTimeWindowDialogOpen] = useState(false);
   const [isGranularityDialogOpen, setIsGranularityDialogOpen] = useState(false);
+  const [isDeleteScheduleDialogOpen, setIsDeleteScheduleDialogOpen] = useState(false);
 
   useEffect(() => {
     if (scheduleId) {
@@ -229,6 +230,33 @@ const Schedule = () => {
     }
   };
 
+  const handleDeleteSchedule = async () => {
+    try {
+      // Delete all appointments associated with this schedule
+      const { error: appointmentsError } = await supabase
+        .from('appointments')
+        .delete()
+        .eq('schedule', scheduleId);
+
+      if (appointmentsError) throw appointmentsError;
+
+      // Delete the schedule itself
+      const { error: scheduleError } = await supabase
+        .from('schedules')
+        .delete()
+        .eq('id', scheduleId);
+
+      if (scheduleError) throw scheduleError;
+
+      toast.success('Schedule and all associated appointments have been deleted successfully!');
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting schedule:', error);
+      toast.error('Failed to delete schedule. Please try again.');
+    }
+    setIsDeleteScheduleDialogOpen(false);
+  };
+
   if (!schedule) return <div>Loading...</div>;
 
   return (
@@ -265,6 +293,9 @@ const Schedule = () => {
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setIsGranularityDialogOpen(true)}>
                 Change timeline granularity
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setIsDeleteScheduleDialogOpen(true)}>
+                Delete schedule
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -343,6 +374,25 @@ const Schedule = () => {
           <Button onClick={handleDeleteAllAppointments} variant="destructive">Delete All Appointments</Button>
         </div>
 
+        
+        <Dialog open={isDeleteScheduleDialogOpen} onOpenChange={setIsDeleteScheduleDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete Schedule</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this schedule and all associated appointments? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setIsDeleteScheduleDialogOpen(false)}>Cancel</Button>
+              <Button variant="destructive" onClick={() => {
+                handleDeleteSchedule();
+                setIsDeleteDialogOpen(false);
+              }}>Delete All</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        
         <Dialog open={isTimeWindowDialogOpen} onOpenChange={setIsTimeWindowDialogOpen}>
           <DialogContent>
             <DialogHeader>
