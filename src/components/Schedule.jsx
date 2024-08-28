@@ -1,4 +1,3 @@
-// src/components/Schedule.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { format, parseISO, addMinutes, isWithinInterval, setHours, setMinutes, differenceInMinutes, isBefore, isEqual } from 'date-fns';

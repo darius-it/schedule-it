@@ -1,12 +1,11 @@
-// src/components/Home.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { supabase } from '../supabaseClient'; // Make sure to import supabase client
-import { generate } from 'random-words'; // Make sure to install and import random-words package
+import { supabase } from '../supabaseClient';
+import { generate } from 'random-words';
 import { toast } from "sonner";
 
 const Home = () => {
