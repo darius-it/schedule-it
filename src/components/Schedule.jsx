@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { toast } from "sonner";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import { ModeToggle } from './mode-toggle';
 
 const Schedule = () => {
   const { scheduleId } = useParams();
@@ -232,13 +233,15 @@ const Schedule = () => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        onClick={() => navigate('/')}
-        className="ml-6 mt-4"
-      >
-        Go Back Home
-      </Button>
+      <div className="flex flex-row justify-between items-center mx-6 mt-4">
+        <Button
+          variant="outline"
+          onClick={() => navigate('/')}
+        >
+          Go Back Home
+        </Button>
+        <ModeToggle />
+      </div>
       <div className="container mx-auto mt-10 p-6 bg-background rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-foreground">

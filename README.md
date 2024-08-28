@@ -9,7 +9,7 @@ A simple and intuitive scheduling application that helps you manage your time ef
 - [x] Create new table for schedules and link it to appointments using a foreign key relation
 - [x] Save newly created schedules to localstorage and also allow add button to add them from slug ("My Schedules" section on homepage)
 - [ ] Turn it into a PWA for more convenient usage from mobile devices
-- [ ] Add dark/light mode toggle (in progress)
+- [x] Add dark/light mode toggle (in progress)
 
 ## Credits
 Copyright (c) 2024, darius-it.

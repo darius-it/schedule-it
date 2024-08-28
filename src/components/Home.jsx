@@ -9,6 +9,7 @@ import { generate } from 'random-words';
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { X } from 'lucide-react';
+import { ModeToggle } from './mode-toggle';
 
 const Home = () => {
   const [scheduleName, setScheduleName] = useState('');
@@ -100,7 +101,10 @@ const Home = () => {
   return (
     <div className="pt-10 px-4">
         <div className="mx-auto max-w-6xl">
-          <h1 className="text-3xl font-bold mb-4 text-foreground">schedule-it — Appointment Scheduler</h1>
+          <div className="flex flex-row justify-between">
+            <h1 className="text-3xl font-bold mb-4 text-foreground">schedule-it — Appointment Scheduler</h1>
+            <ModeToggle />
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="scheduleName">Schedule Name</Label>
