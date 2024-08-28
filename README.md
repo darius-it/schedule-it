@@ -8,8 +8,8 @@ A simple and intuitive scheduling application that helps you manage your time ef
 - [x] Generate project slugs using dictionary words (e.g. funny-tortoise-book); should be unique so they can be used as an ID
 - [x] Create new table for schedules and link it to appointments using a foreign key relation
 - [x] Save newly created schedules to localstorage and also allow add button to add them from slug ("My Schedules" section on homepage)
-- [ ] Turn it into a PWA for more convenient usage from mobile devices
-- [x] Add dark/light mode toggle (in progress)
+- [x] Turn it into a PWA for more convenient usage from mobile devices
+- [x] Add dark/light mode toggle
 
 ## Credits
 Copyright (c) 2024, darius-it.
