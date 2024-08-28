@@ -159,15 +159,17 @@ const Home = () => {
               {mySchedules.map((schedule) => (
                 <div 
                   key={schedule.id} 
-                  className="p-4 border rounded-lg shadow-sm cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors flex justify-between items-center"
+                  className="relative p-6 border rounded-lg shadow-sm cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors"
+                  onClick={() => navigate(`/schedule/${schedule.id}`)}
                 >
-                  <div onClick={() => navigate(`/schedule/${schedule.id}`)}>
+                  <div className="flex items-center">
                     <span className="text-2xl mr-2">{schedule.icon}</span>
                     <span className="font-semibold">{schedule.title}</span>
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="absolute top-2 right-2 p-2 hover:bg-accent-foreground hover:text-accent"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveSchedule(schedule.id);
