@@ -98,7 +98,7 @@ const Home = () => {
   };
 
   return (
-    <div className="pt-10">
+    <div className="pt-10 px-4">
         <div className="mx-auto max-w-6xl">
           <h1 className="text-3xl font-bold mb-4 text-foreground">schedule-it — Appointment Scheduler</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
