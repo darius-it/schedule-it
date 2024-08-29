@@ -41,6 +41,7 @@ These are the necessary steps to host the app yourself if you do not want to use
 - [x] Save newly created schedules to localstorage and also allow add button to add them from slug ("My Schedules" section on homepage)
 - [x] Turn it into a PWA for more convenient usage from mobile devices
 - [x] Add dark/light mode toggle
+- [ ] Allow removing individual appointments from the timelines
 
 ## Credits
 Copyright (c) 2024, darius-it.
